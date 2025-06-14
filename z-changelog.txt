@@ -1,0 +1,261 @@
+//*****************************************************************             
+//* **WARNING: DO NOT SET "NUMBER ON" IN THIS MEMBER OR RENUMBER                
+//*****************************************************************             
+//* THIS SAMPLE CAN BE USED FOR Z/OS 2.4 AND Z/OS 2.5                           
+//*   FOR Z/OS 2.3 SEE TWOPAK23                                                 
+//*   FOR Z/OS 2.2 SEE TWOPAK22                                                 
+//*   FOR Z/OS 2.1 SEE TWOPAK21                                                 
+//*   FOR Z/OS 1.8 THOUGH Z/OS 1.13, SEE TWOPAKZ*                               
+//*                                                                             
+//* PLEASE READ ALL COMMENTS BELOW!!                                            
+//*                                                                             
+//* SAMPLE LAST UPDATED ON 09/16/2024                                           
+//*                                                                             
+//*****************************************************************             
+//*  YOU MUST USE NEWLY INITIALIZED DASD VOLUMES FOR OUTPUT                     
+//*  BEFORE SUBMITTING THIS JOB                                                 
+//*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*             
+//* While this sample is named "TWOPAKxx" due to OS changes                     
+//* over the years, it is now configured to all be on a single                  
+//* volume which must be a 3390-9 or bigger.                                    
+//*                                                                             
+//* On my own environment, about 600 CYL were left free on a                    
+//* 3390-9 using this sample. You can adjust JES2 SPOOL space                   
+//* up or down depending on your own environment.                               
+//*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*             
+//*  GLOBALLY CHANGE SY2PKA TO DESIRED TWOPAK VOLSER #1                         
+//*  GLOBALLY CHANGE TARGSYS TO DESIRED SSA (NEED ALTER ACCESS)                 
+//*  GLOBALLY CHANGE SYS1.ICFCAT.MSTRDRVR TO DRIVER SYS MCAT NAME               
+//*  GLOBALLY CHANGE SYS1.IODF53 TO DRIVER SYS / CURRENT IODF                   
+//*  GLOBALLY CHANGE OMVS.ROOT TO DRIVER SYS OMVS ROOT                          
+//*  GLOBALLY CHANGE OMVS.ETC  TO DRIVER SYS OMVS ETC                           
+//*  GLOBALLY CHANGE SYS1.RACF.LOCAL.PRIMARY to DRIVER RACF PRIM                
+//*  GLOBALLY CHANGE SYS1.RACF.LOCAL.BACKUP  to DRIVER RACF BKUP                
+//*****************************************************************             
+//*  REVIEW ALL PARMLIB, PROCLIB & VTAMLST MEMBERS (STEPS 15-17)                
+//*  REVIEW TCPIP PARM MEMBERS (STEP 20)                                        
+//*  - CONSOL00 AND LCL3270A ADDRESSES MUST MATCH LOCAL 3270 CONFIG             
+//*  - LOAD00 MUST HAVE A VALID OS CONFIG AND EDT CONFIG                        
+//*  - CHECK SPOOLDEF IN JES2PARM FOR CORRECT 5 CHAR. VOLUME PREFIX             
+//*  - TCPIP ACCESS NEEDS PROFILE CUSTOMZIATION AND PROBABLY                    
+//*       ADDITIONAL VTAM OSA / TRLE MEMBERS ADDED TO THE JOB                   
+//*       AND NODES ACTIVATED BASED ON LOCAL CONFIG.                            
+//*****************************************************************             
+//* THE TWOPAK SYSTEM INCLUDES (AT LEAST) THE FOLLOWING PRODUCTS                
+//* (IN ADDITION TO Z/OS BCP AND DFSMS): JES2, TSO/E, RACF, VTAM,               
+//*  TCP/IP, ISPF, SDSF, ICKDSF, HCD, LE, HLASM, UNICODE PLUS                   
+//*  ISV PRODUCTS: SYNCSORT  (FDR NO LONGER AVAILABLE)                          
+//*                                                                             
+//*  A 3390-3 IS REQUIRED FOR THE PRIMARY SYSTEM VOLUME.                        
+//*  YOU MAY BE ABLE TO USE A 3390-2 OR 3380-K DEPENDING ON THE                 
+//*  SIZE OF YOUR RACF DATA SETS, IODF DSN, HOW BIG YOU ALLOCATE                
+//*  YOUR SPOOL AND LOCAL PAGE DATA SET, AND BY NOT INCLUDING                   
+//*  SYS1.MACLIB AND SYS1.MODGEN. ALTERNATIVLY, YOU CAN MOVE SOME               
+//*  OF THE DATASETS IN THE COPY STEP TO THE SECONDARY VOLUME.                  
+//*                                                                             
+//*  IF YOUR CURRENT OMVS ROOT DOES NOT FIT ON A 3390-3, THEN                   
+//*  YOU CAN NOT BUILD THIS SYSTEM WITH 2 VOLUMES.  IN THAT                     
+//*  CASE, USE A SINGLE 3390-9 AND "CHANGE SY2PKB SY2PKA ALL".                  
+//*  THIS WOULD ALSO GIVE YOU PLENTY OF ROOM TO ENLARGE THE                     
+//*  JES2 SPOOL OR LOCAL PAGE DATASET IF NEEDED.                                
+//*                                                                             
+//*  IF YOU ARE NOT USING ZFS, YOU DON'T NEED HLQ.SIOELMOD AND                  
+//*  THE STARTUP OF ZFS NEEDS TO BE REMOVED FROM BPXPRM00. THIS                 
+//*  CAN ALSO SAVE 100+ CYLINDERS.                                              
+//*                                                                             
+//*  UNICODE (SYS1.SCUN*) CAN PROBABLY BE REMOVED IF NOT USING                  
+//*  THIS SAMPLE FOR Z/OS 1.9 (OR ABOVE) AND YOU DON'T CARE ABOUT               
+//*  BEING ABLE TO TELNET INTO UNIX. THIS CAN SAVE ABOUT 150 CYLS.              
+//*  BE SURE TO REMOVE SYS1.SCUNIMG FROM THE LNKLST IN PROG00.                  
+//*****************************************************************             
+//*  SMS IS ACTIVATED IN A NULL CONFIGURATION TO ALLOW TCP/IP TO                
+//*  DYNAMICALLY ALLOCATE Z/OS UNIX FILES.  WITHOUT IT SOME TCP/IP              
+//*  FUNCTIONS THAT REQUIRE TO READ THEIR CONFIG FILES FROM UNIX                
+//*  VIA DYNALLOC WITH PATHNAME WILL FAIL (RC=4, ERRORCODE=04D0)                
+//*  (/ETC/SERVICES IS REQUIRED FOR INETD FOR EXAMPLE AND CAN'T                 
+//*  BE READ).  THIS ISN'T REQUIRED FOR A "RESCUE" SYSTEM, BUT IS               
+//*  INCLUDED IN THE CONFIGURATION ANYWAY AND ALLOWS TELNET INTO                
+//*  Z/OS UNIX IF DESIRED (AND CONFIGURED).                                     
+//*                                                                             
+//*  NOTE THAT WHEN TESTING Z/OS 1.8 I SAW AN ABEND AT IPL TIME                 
+//*  DURING OMVS STARTUP IN CEEBINIT.  THIS TURNED OUT TO BE FROM               
+//*  SYSLOGD WHICH WAS STARTED VIA /ETC/RC IN MY ETC FILE SYSTEM.               
+//*  SYSLOGD NEEDS SCEERUN2 WHICH IS NOT INCLUDED IN THIS SAMPLE                
+//*  DUE TO ITS SIZE. IF YOU WANT TO INCLUDE IT YOU MAY NEED TO MOVE            
+//*  SOME OF THE SECONDARY VOLUME DATA SETS (TCP/IP, ISHELL, /ETC) TO           
+//*  THE PRIMARY VOLUME. YOU MAY ALSO HAVE TO DECREASE THE SIZE OF              
+//*  SOME OF THE OPERATIONAL DATA SETS AS NOTED ABOVE AND LEAVE OUT             
+//*  SYS1.MACLIB / SYS1.MODGEN AS THEY ARE NOT NEEDED FOR THE RUNNING           
+//*  SYSTEM. OTHER OPTIONS ARE TO USE A 3RD VOLUME OR A SINGLE                  
+//*  3390-9 (OR BIGGER) - "CHANGE SY2PKB SY2PKA ALL".                           
+//*****************************************************************             
+//*                                                                             
+//*   THE FOLLOWING STEPS COPY THE RUNNING SYSTEM TO SY2PKA AND ......          
+//*                                                                             
+//*  1.  DEFINE MASTER CATALOG AND SSA                                          
+//*  2.  ALLOCATE RACF DSNS                                                     
+//*  3.  REPRO COPY RACF DSNS                                                   
+//*  4.  DEFINE PAGE DATA SETS, SMF DATA SETS, VIO DSN, AND SMS DSNS            
+//*  5.  FORMAT SMF DATASETS                                                    
+//*  6.  DSS COPY THE CURRENT/RUNNING SYSTEM TO SY2PKA AND CATLG DSNS           
+//*  7.  ZAP RACF DATA SET NAME TABLE                                           
+//*  8.  PUT IPL TEXT ON IPL VOLUME USING ICKDSF                                
+//*  9.  ALLOCATE NEW LOGREC, BRODCAST, SPOOL AND CKPT DSNS                     
+//* 10.  RENAME NEW LOGREC, BRODCAST, SPOOL AND CKPT DSNS                       
+//* 11.  CATALOG NEW LOGREC, BRODCAST, SPOOL AND CKPT DSNS                      
+//* 12.  INITIALIZE LOGREC                                                      
+//* 13.  RENAME ALL OTHER DSNS TO REMOVE SSA                                    
+//* 14.  COMPRESS SYS1.PARMLIB ON SY2PKA                                        
+//* 15.  UPDATE PARMLIB WITH REQUIRED MEMBERS                                   
+//* 16.  UPDATE PROCLIB WITH REQUIRED MEMBERS                                   
+//* 17.  UPDATE VTAMLST WITH REQUIRED MEMBERS                                   
+//* 18.  UPDATE SISPCLIB WITH REQUIRED MEMBERS                                  
+//* 19.  UPDATE SISPPENU WITH REQUIRED MEMBERS                                  
+//* 20.  UPDATE TCPPARMS WITH REQUIRED MEMBERS                                  
+//* 21.  LIST THE SY2PKA MASTER CATALOG                                         
+//* 22.  CLEANUP - REMOVE SSA AND EXPORT DISCONNECT SY2PKA MCAT                 
+//*                                                                             
+//* AFTER THE FIRST IPL:                                                        
+//* 1) REPLY "CONTINUE" to MSG ICH586A FOR PRIMARY AND BACKUP RACF              
+//*    DATABASE IF SEEN (NEW IN Z/OS 1.10)                                      
+//* 2) REPLY "FORMAT,NOREQ" TO JES2 STARTUP OPTION  (MSG $HASP426)              
+//* 3) LOGON TO TSO BY USING "LOGON APPLID(TSO)" FROM VTAM TERMINAL             
+//* 4) FROM TSO READY OR ISPF OPT. 6 ISSUE THE SYNC COMMAND TO                  
+//*    FORMAT THE BRODCAST DATASET. IF USING UADS, BE SURE TO FIRST             
+//*    "ALLOC FI(SYSUADS)" THEN "SYNC BOTH", OTHERWISE "SYNC RACF".             
+//*****************************************************************             
+//* CHANGES FROM Z/OS 1.3 VERSION FOR Z/OS 1.6:                                 
+//* 1. DEL SEUVFLPA AND REPLACE WITH SEUVLPA in COPY / LPALST00                 
+//* 2. DEL SEUVFLNK AND REPLACE WITH SEUVLINK in COPY / PROG00                  
+//* 3. ADD SEAGALT  to COPY / ALTER / LPALST00                                  
+//* 4. ADD SIEALNKE to COPY / ALTER / LNKLST and APF in PROG00                  
+//* 5. REMOVE ILM PARMS FROM IEASYS00                                           
+//*****************************************************************             
+//* CHANGES FROM Z/OS 1.6 VERSION FOR Z/OS 1.8:                                 
+//* 1. DEL REFERENCES TO SISPSASC (1.8 CHANGE)                                  
+//*  (Add to COPY/ALTER/LNKLST/APF to use this sample for z/OS 1.7)             
+//* 2. DEL SHASLINK AND REPLACE WITH SHASLNKE (1.7 CHANGE)                      
+//* 3. ADD SIEAMIGE TO COPY/ALTER/LNKLST/APF IN PROG00 (1.7 CHANGE)             
+//* 4. REMOVE RDINUM= AND RELADDR= FROM JES2PARM (1.7 CHANGE)                   
+//* 5. CHANGE TMP HFS TO A TFS (UNRELATED TO OS LEVEL CHANGE)                   
+//* 6. ADDED HLQ.SIOELMOD FOR ZFS (UNRELATED TO OS LEVEL CHANGE)                
+//*         ADDED IT TO COPY/ALTER/APF/LNKLST                                   
+//* 7. ASSUME UNIX ROOT / ETC ARE ZFS (ALTER STEP CHANGE AND                    
+//*             BPXPRM00 CHANGE - UNRELATED TO OS LEVEL CHANGE)                 
+//* 8. ADDED TN3270 AS A SEPARATE ASID (REQUIRED A/O Z/OS 1.9 BUT               
+//*                                     VALID A/O Z/OS 1.6)                     
+//* 9. ADDED UNICODE DSNS SYS1.SCUN*. SYS1.SCUNIMG to LNKLST                    
+//*     (REQUIRED A/O Z/OS 1.9 FOR SOME TCP/IP FUNCTIONS - TELNET               
+//*        TO UNIX WOULD NOT WORK WITHOUT IT)                                   
+//*****************************************************************             
+//* CHANGES FROM Z/OS 1.8 VERSION FOR Z/OS 1.9:                                 
+//*   (NONE REQUIRED, USE SAMPLE AS IS)                                         
+//*****************************************************************             
+//* CHANGES FROM Z/OS 1.8 VERSION FOR Z/OS 1.10:                                
+//*   MOVED HLQ.SEZALOAD FROM SY2PKB TO SY2PKA DUE TO BIGGER OMVS               
+//*   ROOT.  NO OTHER CHANGES WERE MADE BUT TO USE THIS SAMPLE FOR              
+//*   Z/OS 1.10 YOU MUST MODIFY THIS JOB TO ADD NEW HLQ.SISFMOD1                
+//*   FOR SDSF TO THE COPY/ALTER/LNKLST STEPS.                                  
+//*                                                                             
+//*   YOU MAY SEE MESSAGE ICH586A AT THE FIRST IPL IF YOUR INPUT                
+//*   RACF DATABASE THAT YOU COPIED WAS IN DATA SHARING MODE.                   
+//*****************************************************************             
+//* CHANGES FROM Z/OS 1.8 VERSION FOR Z/OS 1.11:                                
+//*   MAKE THE SAME CHANGES AS FOR Z/OS 1.10 - NO OTHER CHANGES                 
+//*****************************************************************             
+//* CHANGES FROM Z/OS 1.8 VERSION FOR Z/OS 1.13 (ALREADY INCORPORATED):         
+//*  (NOTE THAT YOU PROBABLY NEED A SINGLE 3390-9 FOR THIS BUILD AND            
+//*     WILL NEED TO "CHANGE SY2PKB SY2PKA ALL")                                
+//*   ADD HLQ.SISFMOD1 TO COPY/ALTER/LNKLST       (NEED A/O 1.10)               
+//*   DEL HLQ.HASPINDX FROM COPY/ALTER & ISFPRM00 (NOT NEEDED A/O 1.11)         
+//*   DEL HLQ.SCUNIMG  FROM COPY/ALTER/LNKLST     (NOT NEEDED A/O 1.12)         
+//*   DEL HLQ.SEUVLINK FROM COPY/ALTER/LNKLST/APF (NOT NEEDED A/O 1.13)         
+//*   DEL HLQ.SEUVLPA  FROM COPY/ALTER/LPA        (NOT NEEDED A/O 1.13)         
+//*   DEL HLQ.SIOELMOD FROM COPY/ALTER/LNKLST/APF (NOT NEEDED A/O 1.13)         
+//*   DEL HLQ.SIOELMOD FROM ZFS PROC (comment)    (NOT NEEDED A/O 1.13)         
+//*   MOVED ALL FILES FROM SY2PKB TO SY2PKA EXCEPT THE OMVS ROOT                
+//*   INCREASED LOCAL PAGE DATASET FROM 200 CYL TO 300 CYL                      
+//*****************************************************************             
+//* CHANGES FROM Z/OS 1.13 VERSION FOR Z/OS 2.1  (ALREADY INCORPORATED):        
+//*  (NOTE THAT YOU PROBABLY NEED A SINGLE 3390-9 FOR THIS BUILD AND            
+//*     WILL NEED TO "CHANGE SY2PKB SY2PKA ALL")                                
+//*   DO NOT COPY ALL OF SYS1.SCUNTBL. SIZE INCREASED FROM ABOUT 1000           
+//*   TRACKS TO 37500 DUE TO THE THE UNICODE DYNAMIC LOCALE SERVICE.            
+//*   INSTEAD IEBCOPY ONLY CUN* PDS MEMBERS.                                    
+//*     REMOVE COPY  OF SCUNTBL FROM STEP 6                                     
+//*     ADD ALLOCATE OF SCUNTBL TO STEP 9                                       
+//*     ADD RENAME   OF SCUNTBL TO STEP 10                                      
+//*     ADD CATALOG  OF SCUNTBL TO STEP 11                                      
+//*     INSERT NEW IEBCOPY STEP OF SCUNTBL CUN* MEMBERS AS STEP 12              
+//*     RENUMBER ALL STEPS AFTER STEP 12.                                       
+//*     REMOVE ALTER OF SCUNTBL FROM (RENUMBERED) STEP 14                       
+//*   PARMLIB CHANGES:                                                          
+//*     IEASYS00 - ADD HZSPROC=NONE                                             
+//*     IFAPRD00 - NEW ID - ID(5650-ZOS)                                        
+//*     JES2PARM - RMV BRODCAST= FROM OUTDEF, RMV JCLERR= FROM JOBDEF           
+//*****************************************************************             
+//* CHANGES FROM Z/OS 2.1 VERSION FOR Z/OS 2.2  (ALREADY INCORPORATED):         
+//*   REMOVE ISF.SISFMOD1 FROM COPY/ALTER/LNKLST                                
+//*   PARMLIB CHANGES:                                                          
+//*     CONSOL00 - ADDED HMCS AND SYSCONS                                       
+//*     IEASYS00 - ADD SMFLIM=00                                                
+//*     SMFPRM00 - REMOVE REFERENCES TO IEFUSI                                  
+//*     SMFLIM00 - NEW MEMBER TO CONTROL REGION DEFAULTS                        
+//*****************************************************************             
+//* CHANGES FROM Z/OS 2.2 VERSION FOR Z/OS 2.3  (ALREADY INCORPORATED):         
+//* REMOVE NETVTM.SCNMLPA1 FROM COPY/ALTER/LNKLST and LPALST00                  
+//*   PARMLIB CHANGES:                                                          
+//*     LPALST00 - Remove NETVTM.SCNMLPA1                                       
+//*     IEASYS00 - Add "IZU=00" and "RACF=00"                                   
+//*     ISFPRM00 - Add "CONNECT" statement for SDSFAUX                          
+//*     IZUPRM00 - New member for z/OSMF (so it doesn't start)                  
+//*     IRRPRM00 - New member for RACF Data Set Name table                      
+//*     JES2PARM - (THESE ARE NOT REQUIRED CHANGES)                             
+//*                CKPTDEF DUPLEX=OFF                                           
+//*                SPOOLDEF BUFSIZE=3992,TGSPACE=(MAX=162880),                  
+//*                SPOOLDEF - REMOVED TGBPERVL (OBSOLETE)                       
+//*                TPDEF    - REMOVED STATEMENT                                 
+//*   PROCLIB CHANGES:                                                          
+//*     SDSFAUX  - New member added to SYS1.PROCLIB                             
+//*   CHANGED STEP:                                                             
+//*     ZAP STEP OF RACF DATA SET NAME TABLE (DSNT now in IRRPRM00)             
+//*      - STEP IS LEFT IN BUT IS NOW PGM=IEFBR14                               
+//*****************************************************************             
+//* CHANGES FROM Z/OS 2.3 VERSION FOR Z/OS 2.4  (ALREADY INCORPORATED):         
+//*   REMOVE EPH.SEPHTAB FROM COPY/ALTER + ADD OF PARMLIB MEMBER EPHWP00        
+//*   ADD SCSFMOD1 TO COPY / ALTER / LNKLST AND APF IN PROG00                   
+//*   PARMLIB CHANGES:                                                          
+//*     IKJTSO00 - REMOVE IOEDFSXP FROM AUTHPGM                                 
+//*     PROG00   - ADD CSF.SCSFMOD1 TO APF/LNKLST                               
+//*****************************************************************             
+//* CHANGES FROM Z/OS 2.4 VERSION FOR Z/OS 2.5  (ALREADY INCORPORATED):         
+//*   All changes are cosmetic due to FDR no longer available.                  
+//*                                                                             
+//*   1) A single volume is used - SY2PKA.                                      
+//*   2) Changed FDRCOPY to ADRDSSU (DFDSS) in step COPY6.                      
+//*   3) Removed rename of SYS1.FDR.LINKLIB in RENAME14 step                    
+//*   4) Removed SYS1.FDR.LINKLIB from APF and LNKLST in UPARM16 step           
+//*****************************************************************             
+//*                                                                             
+//* ADDITIONAL THINGS YOU MAY WANT TO DO AFTER THE FIRST IPL:                   
+//*                                                                             
+//*  1) Set up some userids with special non-expiring passwords                 
+//*     with no password change interval:                                       
+//*                                                                             
+//*         PASSWORD USER(userid) NOINTERVAL                                    
+//*         ALU userid PASSWORD(newpass) NOEXP                                  
+//*                                                                             
+//*     ** NOTE: even though RACF will accept NEWPASS as being                  
+//*     the same as the userid, you can't logon with it                         
+//*                                                                             
+//*                                                                             
+//*  2) Turn off RACF inactive auto-revoke:  SETR NOINACTIVE                    
+//*                                                                             
+//*  3) Remove the data sharing profile (auto created in z/OS 1.10              
+//*     and above). This will prevent ICH586A that you will see                 
+//*     during the first IPL if the RACF database you copied was                
+//*     in data sharing mode.                                                   
+//*                                                                             
+//*        RDELETE GXFACILI IRRPLEX_sysplex-name                                
+//*          (sysplex-name is from the RACF database you copied)                
+//*                                                                             
