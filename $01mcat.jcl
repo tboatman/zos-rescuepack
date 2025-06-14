@@ -14,6 +14,6 @@
      CAT(SYS1.ICFCAT.MSTRDRVR)    /* CHANGE */                                  
  IF LASTCC=0 THEN DO                                                            
    DEF ALIAS(NAME(TARGSYS) RELATE(SYS1.MCAT.VSY2PKA)) -                         
-     CAT(SYS1.ICFCAT.MSTRDRVR)    /* CHANGE */                                  
+     CAT(SYS1.ICFCAT.MSTRDRVR)    /* CHANGE to current naster */                
  END                                                                            
 /*                                                                              
