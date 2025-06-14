@@ -1,4 +1,9 @@
-//INITDASD JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K   
+//INITDASD JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K  
+//***************************************************************
+//*
+//* $00INIT - Initialization of DASD volumes and IPL text
+//*
+//*************************************************************** 
 //STEP1 EXEC PGM=ICKDSF                                         
 //SYSPRINT DD SYSOUT=*                                          
 //SYSIN DD *                                                    
