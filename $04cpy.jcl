@@ -1,5 +1,4 @@
-//* TODO 
-//* JOBCARD
+//COPY JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K
 //* Verify existence of all datasets
 //* Alter zfs data set names
 //* update volumes
@@ -30,7 +29,7 @@
 //SYSIN    DD  *                                                                
  COPY DS( -                                                                     
   INCLUDE( -                                                                    
-      SYS1.IODF53.CLUSTER    -                                                  
+      SYS1.IODF99.CLUSTER    -                                                  
       CSF.SCSFMOD1    -                                                         
       SYS1.CMDLIB    -                                                          
       SYS1.DAE    -                                                             
@@ -47,13 +46,14 @@
       SYS1.NUCLEUS    -                                                         
       SYS1.SHASLNKE    -                                                        
       SYS1.SHASMIG    -                                                         
-      ASM.SASMMOD1    -                                                         
+      HLA.SASMMOD1    -                                                         
       SYS1.PARMLIB    -                                                         
       SYS1.PROCLIB    -                                                         
       SYS1.SAMPLIB    -                                                         
       SYS1.SISTCLIB    -                                                        
       SYS1.SVCLIB    -                                                          
-      CEE.SCEERUN    -                                                          
+      CEE.SCEERUN    -  
+      CEE.SCEERUN2    -                                                        
       SYS1.VTAMLIB    -                                                         
       SYS1.UADS    -                                                            
       SYS1.VTAMLST    -                                                         
@@ -64,7 +64,7 @@
       SYS1.SCBDHENU    -                                                        
       SYS1.SDWWDLPA    -                                                        
       SYS1.DBBLIB    -                                                          
-      REXX.SEAGALT    -                                                         
+      SYS1.SEAGALT    -                                                         
       ISF.SISFEXEC    -                                                         
       ISF.SISFLINK    -                                                         
       ISF.SISFLOAD    -                                                         
@@ -82,14 +82,6 @@
       ISP.SISPSENU    -                                                         
       ISP.SISPSLIB    -                                                         
       ISP.SISPTENU    -                                                         
-      SYS1.IBM.PROCLIB    -                                                     
-      SYS1.IBM.PARMLIB    -                                                     
-      SYSV.SYNCSORT.ZOS.SYNCLPA    -                                            
-      SYSV.SYNCSORT.ZOS.SYNCRENT    -                                           
-      SYSV.SYNCSORT.ZOS.SYNCAUTH    -                                           
-      SYSV.SYNCSORT.ZOS.SYNCLINK    -                                           
-      SYS2.LOCAL.LPALIB    -                                                    
-      SYS2.LOCAL.LINKLIB    -                                                   
       SYS1.SCUNLOCL    -                                                        
       TCPIP.SEZALPA    -                                                        
       TCPIP.SEZALOAD    -                                                       
@@ -100,13 +92,14 @@
       SYS1.SBPXPENU    -                                                        
       SYS1.SBPXMENU    -                                                        
       SYS1.SBPXTENU    -                                                        
-      OMVS.ROOT    -                                                            
-      OMVS.ETC    -                                                             
+      ZFS.ADCDPL.ROOT    -                                                      
+      ZFS.S0W1.ETC    -  
+      ZFS.S0W1.TMP    -
          )  -                                                                   
      ) -                                                                        
   RENAMEU( -                                                                    
      (SYS1.IODF53.CLUSTER,   -                                                  
-        TARGSYS.SYS1.IODF53.CLUSTER)   -                                        
+        TARGSYS.SYS1.IODF99.CLUSTER)   -                                        
      (CSF.SCSFMOD1,   -                                                         
         TARGSYS.CSF.SCSFMOD1)   -                                               
      (SYS1.CMDLIB,   -                                                          
@@ -139,7 +132,7 @@
         TARGSYS.SYS1.SHASLNKE)   -                                              
      (SYS1.SHASMIG,   -                                                         
         TARGSYS.SYS1.SHASMIG)   -                                               
-     (ASM.SASMMOD1,   -                                                         
+     (HLA.SASMMOD1,   -                                                         
         TARGSYS.ASM.SASMMOD1)   -                                               
      (SYS1.PARMLIB,   -                                                         
         TARGSYS.SYS1.PARMLIB)   -                                               
@@ -153,6 +146,8 @@
         TARGSYS.SYS1.SVCLIB)   -                                                
      (CEE.SCEERUN,   -                                                          
         TARGSYS.CEE.SCEERUN)   -                                                
+     (CEE.SCEERUN2,   -                                                         
+        TARGSYS.CEE.SCEERUN2)   -                                               
      (SYS1.VTAMLIB,   -                                                         
         TARGSYS.SYS1.VTAMLIB)   -                                               
      (SYS1.UADS,   -                                                            
@@ -209,22 +204,6 @@
         TARGSYS.ISP.SISPSLIB)   -                                               
      (ISP.SISPTENU,   -                                                         
         TARGSYS.ISP.SISPTENU)   -                                               
-     (SYS1.IBM.PROCLIB,   -                                                     
-        TARGSYS.SYS1.IBM.PROCLIB)   -                                           
-     (SYS1.IBM.PARMLIB,   -                                                     
-        TARGSYS.SYS1.IBM.PARMLIB)   -                                           
-     (SYSV.SYNCSORT.ZOS.SYNCLPA,   -                                            
-        TARGSYS.SYSV.SYNCSORT.ZOS.SYNCLPA)   -                                  
-     (SYSV.SYNCSORT.ZOS.SYNCRENT,   -                                           
-        TARGSYS.SYSV.SYNCSORT.ZOS.SYNCRENT)   -                                 
-     (SYSV.SYNCSORT.ZOS.SYNCAUTH,   -                                           
-        TARGSYS.SYSV.SYNCSORT.ZOS.SYNCAUTH)   -                                 
-     (SYSV.SYNCSORT.ZOS.SYNCLINK,   -                                           
-        TARGSYS.SYSV.SYNCSORT.ZOS.SYNCLINK)   -                                 
-     (SYS2.LOCAL.LPALIB,   -                                                    
-        TARGSYS.SYS1.VSY2PKA.LPALIB)   -                                        
-     (SYS2.LOCAL.LINKLIB,   -                                                   
-        TARGSYS.SYS1.VSY2PKA.LINKLIB)   -                                       
      (SYS1.SCUNLOCL,   -                                                        
         TARGSYS.SYS1.SCUNLOCL)   -                                              
      (TCPIP.SEZALPA,   -                                                        
@@ -245,14 +224,16 @@
         TARGSYS.SYS1.SBPXMENU)   -                                              
      (SYS1.SBPXTENU,   -                                                        
         TARGSYS.SYS1.SBPXTENU)   -                                              
-     (OMVS.ROOT,   -                                                            
-        TARGSYS.SYS1.OMVS.ROOT)   -                                             
-     (OMVS.ETC,   -                                                             
-        TARGSYS.SYS1.OMVS.ETC)   -                                              
+     (ZFS.ADCDPL.ROOT,   -                                                      
+        TARGSYS.ZFS.ADCDPL.ROOT)   -                                            
+     (ZFS.S0W1.ETC,   -                                                         
+        TARGSYS.ZFS.S0W1.ETC)   -                                              
+     (ZFS.S0W1.TMP,   -                                                         
+        TARGSYS.ZFS.S0W1.TMP)   -                                              
      ) -                                                                        
   SHARE TOL(ENQF)                  -                                            
   STORCLAS(SCNONSMS)               -                                            
-  OUTDYNAM(SYS1PK,SYSALLDA)        -                                            
+  OUTDYNAM(SY2PKA,SYSALLDA)        -                                            
   REPLACEU -                                                                    
   CATALOG -                                                                     
   PROCESS(SYS1) SPHERE -                                                        

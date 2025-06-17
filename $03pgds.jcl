@@ -1,3 +1,4 @@
+//PGDS JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K
 //*****************************************************************             
 //* DEFINE PAGE DATA SETS, SMF DATASETS, AND VIO DSN                            
 //*****************************************************************             

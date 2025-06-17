@@ -1,4 +1,4 @@
-
+//LOGREC JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K
 //*****************************************************************             
 //* CATALOG NEW LOGREC, BRODCAST, SPOOL, CKPT AND SCUNTBL DSNS                  
 //*****************************************************************             

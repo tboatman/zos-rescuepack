@@ -1,3 +1,4 @@
+//MCAT JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K
 //*****************************************************************             
 //* DEFINE MASTER CATALOG AND SSA                                               
 //*****************************************************************             
@@ -11,9 +12,9 @@
      CYL(3 1) ICFCAT -                                                          
      SHR(3 4) STRNO(3) BUFND(4)  BUFNI(4)  FSPC(10 10)) -                       
      DATA( CISZ(4096)) -                                                        
-     CAT(SYS1.ICFCAT.MSTRDRVR)    /* CHANGE */                                  
+     CAT(SCATALOG.Z31C.MASTER)    /* CHANGE */                                  
  IF LASTCC=0 THEN DO                                                            
    DEF ALIAS(NAME(TARGSYS) RELATE(SYS1.MCAT.VSY2PKA)) -                         
-     CAT(SYS1.ICFCAT.MSTRDRVR)    /* CHANGE to current naster */                
+     CAT(CATALOG.Z31C.MASTER)    /* CHANGE to current master */                
  END                                                                            
 /*                                                                              

@@ -1,7 +1,8 @@
+//RACFZAP7  JOB (RACFZAP),'RACF ZAP',CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID
 //*RACFZAP7  EXEC PGM=AMASPZAP,PARM=IGNIDRFULL,REGION=4M,COND=(0,NE)            
 //RACFZAP7  EXEC PGM=IEFBR14,PARM=IGNIDRFULL,REGION=4M,COND=(0,NE)              
 //SYSPRINT DD  SYSOUT=*                                                         
-//SYSLIB   DD  DSN=TARGSYS.SYS1.VSY2PKA.LINKLIB,DISP=SHR                        
+//SYSLIB   DD  DSN=TARGSYS.SYS1.LINKLIB,DISP=SHR                        
 //SYSIN    DD  *                                                                
 NAME ICHRDSNT ICHRDSNT                                                          
 REP 005A 80                                                                     

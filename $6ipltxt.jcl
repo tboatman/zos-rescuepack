@@ -1,3 +1,4 @@
+//IPLTEXT JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K
 //*****************************************************************             
 //* PUT IPL TEXT ON IPL VOLUME USING ICKDSF                                     
 //*****************************************************************             

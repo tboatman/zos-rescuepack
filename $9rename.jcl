@@ -1,13 +1,14 @@
+//RENAME JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K
 //*****************************************************************             
 //* RENAME ALL OTHER DSNS TO REMOVE SSA                                         
 //*****************************************************************             
 //RENAME14  EXEC  PGM=IDCAMS,REGION=4M,COND=(0,NE)                              
 //SYSPRINT  DD    SYSOUT=*                                                      
 //SYSIN     DD    *                                                             
- ALTER TARGSYS.SYS1.RACF.PRIMARY -                                              
+ ALTER TARGSYS.SYS1.RACFDS -                                              
    NEWNAME(SYS1.RACF.PRIMARY) -                                                 
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.RACF.BACKUP -                                               
+ ALTER TARGSYS.SYS1.RACFDS.BACKUP -                                             
    NEWNAME(SYS1.RACF.BACKUP) -                                                  
      CAT(SYS1.MCAT.VSY2PKA)                                                     
  ALTER TARGSYS.SYS1.PAGE.VSY2PKA.PLPA -                                         
@@ -61,10 +62,10 @@
  ALTER TARGSYS.SYS1.SMS.COMMDS1.DATA -                                          
    NEWNAME(SYS1.SMS.COMMDS1.DATA) -                                             
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.IODF53.CLUSTER -                                            
+ ALTER TARGSYS.SYS1.IODF01.CLUSTER -                                            
    NEWNAME(SYS1.IODF00.CLUSTER) -                                               
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.IODF53 -                                                    
+ ALTER TARGSYS.SYS1.IODF01 -                                                    
    NEWNAME(SYS1.IODF00) -                                                       
      CAT(SYS1.MCAT.VSY2PKA)                                                     
  ALTER TARGSYS.CSF.SCSFMOD1 -                                                   
@@ -136,9 +137,9 @@
  ALTER TARGSYS.CEE.SCEERUN      -                                               
    NEWNAME(CEE.SCEERUN)      -                                                  
      CAT(SYS1.MCAT.VSY2PKA)                                                     
-  /* ALTER TARGSYS.CEE.SCEERUN2      - */                                       
-  /*  NEWNAME(CEE.SCEERUN2)      -     */                                       
-  /*    CAT(SYS1.MCAT.VSY2PKA)         */                                       
+ ALTER TARGSYS.CEE.SCEERUN2      -                                       
+   NEWNAME(CEE.SCEERUN2)      -                                        
+     CAT(SYS1.MCAT.VSY2PKA)                                            
  ALTER TARGSYS.SYS1.VTAMLIB -                                                   
    NEWNAME(SYS1.VTAMLIB) -                                                      
      CAT(SYS1.MCAT.VSY2PKA)                                                     
@@ -169,8 +170,8 @@
  ALTER TARGSYS.SYS1.DBBLIB -                                                    
    NEWNAME(SYS1.DBBLIB) -                                                       
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.REXX.SEAGALT      -                                              
-   NEWNAME(REXX.SEAGALT)      -                                                 
+ ALTER TARGSYS.SYS1.SEAGALT      -                                              
+   NEWNAME(SYS1.SEAGALT)      -                                                 
      CAT(SYS1.MCAT.VSY2PKA)                                                     
  ALTER TARGSYS.ISF.SISFEXEC      -                                              
    NEWNAME(ISF.SISFEXEC)      -                                                 
@@ -223,24 +224,6 @@
  ALTER TARGSYS.ISP.SISPTENU      -                                              
    NEWNAME(ISP.SISPTENU)      -                                                 
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.IBM.PROCLIB -                                               
-   NEWNAME(SYS1.IBM.PROCLIB) -                                                  
-     CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.IBM.PARMLIB -                                               
-   NEWNAME(SYS1.IBM.PARMLIB) -                                                  
-     CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYSV.SYNCSORT.ZOS.SYNCLPA -                                      
-   NEWNAME(SYS1.SYNCSORT.ZOS.SYNCLPA) -                                         
-     CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYSV.SYNCSORT.ZOS.SYNCRENT -                                     
-   NEWNAME(SYS1.SYNCSORT.ZOS.SYNCRENT) -                                        
-     CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYSV.SYNCSORT.ZOS.SYNCAUTH -                                     
-   NEWNAME(SYS1.SYNCSORT.ZOS.SYNCAUTH) -                                        
-     CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYSV.SYNCSORT.ZOS.SYNCLINK -                                     
-   NEWNAME(SYS1.SYNCSORT.ZOS.SYNCLINK) -                                        
-     CAT(SYS1.MCAT.VSY2PKA)                                                     
  ALTER TARGSYS.SYS1.VSY2PKA.LPALIB -                                            
    NEWNAME(SYS1.VSY2PKA.LPALIB) -                                               
      CAT(SYS1.MCAT.VSY2PKA)                                                     
@@ -277,19 +260,19 @@
  ALTER TARGSYS.SYS1.SBPXTENU -                                                  
    NEWNAME(SYS1.SBPXTENU) -                                                     
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.OMVS.ROOT -                                                 
+ ALTER TARGSYS.ZFS.ADCDPL.ROOT -                                                
    NEWNAME(SYS1.OMVS.ROOT) -                                                    
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.OMVS.ROOT.DATA -                                            
+ ALTER TARGSYS.ZFS.ADCDPL.ROOT.T0838353.D5447400 -                              
    NEWNAME(SYS1.OMVS.ROOT.DATA) -                                               
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.OMVS.ETC -                                                  
+ ALTER TARGSYS.ZFS.S0W1.ETC -                                                  
    NEWNAME(SYS1.OMVS.ETC) -                                                     
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.OMVS.ETC.DATA -                                             
+ ALTER TARGSYS.ZFS.S0W1.ETC.DATA -                                             
    NEWNAME(SYS1.OMVS.ETC.DATA) -                                                
      CAT(SYS1.MCAT.VSY2PKA)                                                     
-  /* ALTER TARGSYS.SYS1.OMVS.TMP -     */                                       
-  /*   NEWNAME(SYS1.OMVS.TMP) -        */                                       
-  /*    CAT(SYS1.MCAT.VSY2PKA)         */                                       
+ ALTER TARGSYS.SYS1.OMVS.TMP -                                            
+   NEWNAME(SYS1.OMVS.TMP) -                                               
+     CAT(SYS1.MCAT.VSY2PKA)                                                
 /*                                                                              

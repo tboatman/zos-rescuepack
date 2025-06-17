@@ -3,12 +3,12 @@
 //*
 //* $00INIT - Initialization of DASD volumes and IPL text
 //*
+//* C3INM1 on 0A96 will become SY2PKA
+//* 
 //*************************************************************** 
 //STEP1 EXEC PGM=ICKDSF                                         
 //SYSPRINT DD SYSOUT=*                                          
 //SYSIN DD *                                                    
-  INIT UNIT(0601) NOVERIFY -                       
-      OWNERID(IBMUSER) VTOC(0,1,10) INDEX(0,11,15) VOLID(SY2PKA)
+  INIT UNIT(0A96) NOVERIFY -                       
+      OWNERID(IBMUSER) VOLID(SY2PKA)
 /*
-//* TODO - verify VTOC and INDEX parameters and adapt to proper
-//*        volume size
