@@ -1,3 +1,4 @@
+//TCP JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K
 //*****************************************************************             
 //* UPDATE TCPPARMS WITH REQUIRED MEMBERS                                       
 //*****************************************************************             

@@ -1,3 +1,4 @@
+//VTAM JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K
 //*****************************************************************             
 //* UPDATE VTAMLST WITH REQUIRED MEMBERS                                        
 //*****************************************************************             

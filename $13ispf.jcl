@@ -1,3 +1,4 @@
+//ISPF JOB CLASS=A,MSGCLASS=X,NOTIFY=&SYSUID,REGION=4096K
 //*****************************************************************             
 //* UPDATE SISPCLIB WITH REQUIRED MEMBERS                                       
 //*****************************************************************             
