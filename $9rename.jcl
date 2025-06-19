@@ -62,10 +62,10 @@
  ALTER TARGSYS.SYS1.SMS.COMMDS1.DATA -                                          
    NEWNAME(SYS1.SMS.COMMDS1.DATA) -                                             
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.IODF01.CLUSTER -                                            
+ ALTER TARGSYS.IODF01.CLUSTER -                                            
    NEWNAME(SYS1.IODF00.CLUSTER) -                                               
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.IODF01 -                                                    
+ ALTER TARGSYS.IODF01 -                                                    
    NEWNAME(SYS1.IODF00) -                                                       
      CAT(SYS1.MCAT.VSY2PKA)                                                     
  ALTER TARGSYS.CSF.SCSFMOD1 -                                                   
@@ -272,7 +272,7 @@
  ALTER TARGSYS.ZFS.S0W1.ETC.DATA -                                             
    NEWNAME(SYS1.OMVS.ETC.DATA) -                                                
      CAT(SYS1.MCAT.VSY2PKA)                                                     
- ALTER TARGSYS.SYS1.OMVS.TMP -                                            
+ ALTER TARGSYS.ZFS.S0W1.TMP -                                            
    NEWNAME(SYS1.OMVS.TMP) -                                               
      CAT(SYS1.MCAT.VSY2PKA)                                                
 /*                                                                              

@@ -34,6 +34,6 @@
 //*****************************************************************             
 //* INITIALIZE LOGREC                                                           
 //*****************************************************************             
-//LOGREC13  EXEC  PGM=IFCDIP00,REGION=4M,COND=(0,NE)                            
+//LOGREC13  EXEC  PGM=IFCDIP00,REGION=4M
 //SERERDS   DD DISP=SHR,DSN=SYS1.VSY2PKA.LOGREC,                                
 //             VOL=SER=SY2PKA,UNIT=SYSALLDA                                     

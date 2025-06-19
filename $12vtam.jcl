@@ -53,112 +53,112 @@ SFBUF=(163,,0,,1,1)
 LCL3270A LBUILD                                                                 
 *                                                                               
 *  0120 IS MASTER CONSOLE                                                       
-*LCL120   LOCAL CUADDR=0120,                                          X         
+*LCL120   LOCAL CUADDR=0700,                                          X         
 *               DLOGMOD=D4B32782,                                     X         
 *               TERM=3277,                                            X         
 *               FEATUR2=MODEL2,                                       X         
 *               ISTATUS=ACTIVE,                                       X         
 *               USSTAB=ISTINCDT                                                 
 *                                                                               
-LCL121   LOCAL CUADDR=0121,                                            X        
+LCL121   LOCAL CUADDR=0701,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL122   LOCAL CUADDR=0122,                                            X        
+LCL122   LOCAL CUADDR=0702,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL123   LOCAL CUADDR=0123,                                            X        
+LCL123   LOCAL CUADDR=0703,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL124   LOCAL CUADDR=0124,                                            X        
+LCL124   LOCAL CUADDR=0704,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL125   LOCAL CUADDR=0125,                                            X        
+LCL125   LOCAL CUADDR=0705,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL126   LOCAL CUADDR=0126,                                            X        
+LCL126   LOCAL CUADDR=0706,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL127   LOCAL CUADDR=0127,                                            X        
+LCL127   LOCAL CUADDR=0707,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL128   LOCAL CUADDR=0128,                                            X        
+LCL128   LOCAL CUADDR=0708,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL129   LOCAL CUADDR=0129,                                            X        
+LCL129   LOCAL CUADDR=0709,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL12A   LOCAL CUADDR=012A,                                            X        
+LCL12A   LOCAL CUADDR=070A,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL12B   LOCAL CUADDR=012B,                                            X        
+LCL12B   LOCAL CUADDR=070B,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL12C   LOCAL CUADDR=012C,                                            X        
+LCL12C   LOCAL CUADDR=070C,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL12D   LOCAL CUADDR=012D,                                            X        
+LCL12D   LOCAL CUADDR=070D,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL12E   LOCAL CUADDR=012E,                                            X        
+LCL12E   LOCAL CUADDR=070E,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
                ISTATUS=ACTIVE,                                         X        
                USSTAB=ISTINCDT                                                  
 *                                                                               
-LCL12F   LOCAL CUADDR=012F,                                            X        
+LCL12F   LOCAL CUADDR=070F,                                            X        
                DLOGMOD=D4B32782,                                       X        
                TERM=3277,                                              X        
                FEATUR2=MODEL2,                                         X        
