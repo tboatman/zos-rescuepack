@@ -94,7 +94,7 @@ HARDCOPY DEVNUM(SYSLOG)
 /********************************************************************/          
 /* MASTER AND ALTERNATE CONSOLES                                    */          
 /********************************************************************/          
-CONSOLE DEVNUM(120)  ROUTCODE(ALL)  /* MASTER - 0120 */                         
+CONSOLE DEVNUM(700)  ROUTCODE(ALL)  /* MASTER - 0700 */                         
         ALTERNATE(720)                                                          
         AUTH(MASTER)                                                            
         AREA(NONE)                                                              
@@ -106,7 +106,7 @@ CONSOLE DEVNUM(120)  ROUTCODE(ALL)  /* MASTER - 0120 */
         CON(N) DEL(RD) RNUM(20) RTME(1/4) MFORM(J,T,S)                          
         SEG(20)                                                                 
 CONSOLE DEVNUM(720)  ROUTCODE(ALL)  /* ALTERNATE - 0720 */                      
-        ALTERNATE(120)                                                          
+        ALTERNATE(700)                                                          
         AUTH(ALL)                                                               
         AREA(NONE)                                                              
         UNIT(3270-X)                                                            
